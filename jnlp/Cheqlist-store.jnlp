@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="6.0+" codebase="http://eriwen.com/cheqlist/javastore/" href="Cheqlist-store.jnlp">
+    <information>
+        <title>Cheqlist</title>
+        <vendor>Eric Wendelin</vendor>
+        <homepage href="http://kenai.com/projects/cheqlist"/>
+        <description>A to-do list manager powered by Remember The Milk</description>
+        <icon href="cheqlist_logo_256.png" width="256" height="256"/>
+        <icon kind="shortcut" href="cheqlist_logo_16.png" width="16" height="16"/>
+        <icon kind="shortcut" href="cheqlist_logo_32.png" width="32" height="32"/>
+        <icon kind="shortcut" href="cheqlist_logo_64.png" width="64" height="64"/>
+        <icon kind="splash" href="cheqlist_logo_256.png" width="256" height="256"/>
+        <shortcut>
+            <desktop/>
+            <menu submenu="Cheqlist"/>
+        </shortcut>
+    </information>
+    <security>
+        <all-permissions/>
+    </security>
+    <resources>
+        <j2se version="1.6+" java-vm-args=""/>
+        <property name="jnlp.packEnabled" value="true"/>
+        <property name="jnlp.versionEnabled" value="true"/>
+        <extension name="JavaFX Runtime" href="http://dl.javafx.com/1.2/javafx-rt.jnlp"/>
+        <jar href="Cheqlist0.1.jar" main="true"/>
+    </resources>
+    <application-desc main-class="com.sun.javafx.runtime.main.Main">
+        <argument>MainJavaFXScript=org.eriwen.cheqlist.Main</argument>
+    </application-desc>
+</jnlp>
