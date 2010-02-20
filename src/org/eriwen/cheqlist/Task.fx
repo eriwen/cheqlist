@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 Eric Wendelin
+ *  Copyright 2010 Eric Wendelin
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import javafx.scene.control.Label;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.Glow;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.Text;
@@ -51,11 +50,7 @@ public class Task extends CustomNode {
     var currentEffect:Effect = Glow { level: 0.0 };
     def hoverEffect = Glow { level: 0.5 }
 
-    def background = Rectangle {
-        var stopColor = bind if (priority.equals('1')) then theme.priority1Color
-            else if (priority.equals('2')) then theme.priority2Color
-            else if (priority.equals('3')) then theme.priority3Color
-            else theme.priorityNColor;
+    def background: Rectangle = Rectangle {
         cursor: Cursor.HAND
         width: theme.paneWidth, height: taskHeight
         effect: bind currentEffect
@@ -66,16 +61,21 @@ public class Task extends CustomNode {
         onMouseExited: function(e:MouseEvent) {
             currentEffect = Glow { level: 0.0 }
         }
-        fill: LinearGradient {
-            startX: 0.1, startY: 0.0
-            endX: 0.7, endY: 0.4
-            stops: [
-                Stop { color: stopColor, offset: 0.0 },
-                Stop { color: theme.backgroundColor, offset: 0.5 }
-            ]
-        }
+        fill: bind theme.backgroundColor
     }
-
+    def taskPriority: Rectangle = Rectangle {
+        width: 11, height: taskHeight,
+        fill: bind if (priority.equals('1')) then theme.priority1Color
+            else if (priority.equals('2')) then theme.priority2Color
+            else if (priority.equals('3')) then theme.priority3Color
+            else theme.priorityNColor
+        effect: bind currentEffect
+    }
+    def checkbox = CheckBox {
+        translateX: 17, translateY: 5,
+        allowTriState: false, selected: false, blocksMouse: true,
+        onMouseClicked: completeTaskAction
+    }
     def taskDue:Text = Text {
         var wrappingWidth = 60;
         font: theme.detailFont
@@ -86,29 +86,23 @@ public class Task extends CustomNode {
         content: due
     }
     def taskName = Label {
-        translateX: 28
+        translateX: 38
         font: theme.normalFont, text: name,
         textFill: bind theme.foregroundColor
-        width: theme.paneWidth - 90
+        width: theme.paneWidth - 100
     }
     def tagsLabel = Label {
-        translateX: 28, translateY: 16
+        translateX: 38, translateY: 16
         font: theme.detailFont, 
         text: if (tags != '') then "{listName}, {tags}"
                 else listName
         textFill: bind theme.dueDateTextColor
-        width: theme.paneWidth - 90
-    }
-
-    def checkbox = CheckBox {
-        translateX: 7, translateY: 2,
-        allowTriState: false, selected: false, blocksMouse: true,
-        onMouseClicked: completeTaskAction
+        width: theme.paneWidth - 100
     }
 
     override public function create():Node {
         return Group {
-            content: [background, taskDue, taskName, tagsLabel, checkbox]
+            content: [background, taskPriority, taskDue, taskName, tagsLabel, checkbox]
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 Eric Wendelin
+ *  Copyright 2010 Eric Wendelin
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -124,7 +124,7 @@ package class TaskListPane extends Pane {
     }
 
     def taskListContainer:VBox = VBox {
-        translateX: 0, translateY: 45
+        translateX: 0, translateY: 40
         spacing: 1
         width: theme.paneWidth, height: theme.paneHeight - 174,
         focusTraversable: false

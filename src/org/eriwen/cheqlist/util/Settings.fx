@@ -41,7 +41,7 @@ public class Settings extends Serializable {
         defaultAppSettings.put("taskSort", 'smart');
         defaultAppSettings.put("showCompletedTasks", false);
         defaultAppSettings.put("defaultTaskFilter", 'dueBefore:"1 week from today"');
-        defaultAppSettings.put("syncInterval", 120000);
+        defaultAppSettings.put("syncInterval", 900000);
         defaultAppSettings.put("curTimezoneOffset", 0);
         defaultAppSettings.put("foregroundColor", "#FFFFFF");
         defaultAppSettings.put("secondaryForegroundColor", "#DDDDDD");

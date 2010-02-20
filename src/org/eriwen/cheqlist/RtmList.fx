@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 Eric Wendelin
+ *  Copyright 2010 Eric Wendelin
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,11 +18,10 @@ package org.eriwen.cheqlist;
 import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.*;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.*;
 import javafx.scene.shape.Rectangle;
 
 import org.eriwen.cheqlist.theme.Theme;
@@ -41,29 +40,11 @@ public class RtmList extends CustomNode {
     public-init var clickedAction: function(String);
     public-init var deletedAction: function(MouseEvent);
 
-    var currentEffect:Effect = Glow { level: 0.0 };
-    def hoverEffect = Glow { level: 0.5 }
-
     def background = Rectangle {
         width: theme.paneWidth, height: listHeight
-        blocksMouse: true
         cursor: Cursor.HAND
-        effect: bind currentEffect
         onMouseClicked: function(e) { clickedAction(name) }
-        onMouseEntered: function(e:MouseEvent) {
-            currentEffect = hoverEffect
-        }
-        onMouseExited: function(e:MouseEvent) {
-            currentEffect = Glow { level: 0.0 }
-        }
-        fill: LinearGradient {
-            startX: 0.1, startY: 0.0
-            endX: 0.7, endY: 0.4
-            stops: [
-                Stop { color: theme.priorityNColor, offset: 0.0 },
-                Stop { color: theme.backgroundColor, offset: 0.5 }
-            ]
-        }
+        fill: bind theme.backgroundColor
     }
     def smartIcon = ImageView {
         image: Image { url: theme.smartImageUrl }
@@ -73,7 +54,7 @@ public class RtmList extends CustomNode {
     def listName = Label {
         translateX: 26, translateY: 4
         font: theme.normalFont, text: name,
-        textFill: theme.foregroundColor
+        textFill: bind theme.foregroundColor
         width: theme.paneWidth - 70
     }
     def deleteButton = Button {

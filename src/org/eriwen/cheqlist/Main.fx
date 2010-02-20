@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 Eric Wendelin
+ *  Copyright 2010 Eric Wendelin
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -206,7 +206,7 @@ def settingsPane:SettingsPane = SettingsPane {
         visualEffectsEnabled = false;
         showTooltips = true;
         showCompletedTasks = false;
-        syncIntervalMillis = 120000;
+        syncIntervalMillis = 900000;
         taskFilter = 'dueBefore: "1 week from today"';
         taskSort = 'smart';
         settings.put('foregroundColor', '#FFFFFF');
@@ -385,7 +385,7 @@ function updateSettings():Void {
 }
 function updateTimezone():Void {
     groovyRtmUtils.loadRtmCollection(function() {
-        return groovyRtm.timezonesGetTimezoneByName(rtmsettings.get('timezone').toString()).get('offset').toString();
+        return groovyRtm.timezonesGetTimezoneByName(rtmsettings.get('timezone').toString()).get('currentOffset').toString();
     }, onTimezoneLoaded);
 }
 function updateTasks():Void {

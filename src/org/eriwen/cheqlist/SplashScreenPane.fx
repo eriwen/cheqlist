@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 Eric Wendelin
+ *  Copyright 2010 Eric Wendelin
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ import javafx.scene.image.ImageView;
 
 /**
  * @author Eric Wendelin
+ *
+ * View while initializing and loading RTM bits for Cheqlist.
  */
 
 package class SplashScreenPane extends Pane {
