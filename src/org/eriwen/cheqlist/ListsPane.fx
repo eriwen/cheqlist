@@ -46,7 +46,9 @@ package class ListsPane extends Pane {
         delete listsList;
         for (list in lists) {
             var listMap = list as LinkedHashMap;
-            insert listMap into listsList;
+            if (listMap.get('archived').equals('0')) {
+                insert listMap into listsList;
+            }
         }
     };
     public-init var rtm:RtmService;
@@ -61,11 +63,11 @@ package class ListsPane extends Pane {
         spacing: 1
         focusTraversable: false
         width: theme.paneWidth, height: theme.paneHeight - 174
-        content: bind for (list in listsList where (list as Map).get('archived').equals('0')) {
+        content: bind for (list in listsList) {
             var listMap = list as Map;
             var listName = listMap.get('name').toString();
             var listId = listMap.get('id').toString();
-            var theList:RtmList = RtmList {
+            RtmList {
                 listId: listId
                 name: listName
                 smart: if (listMap.get('smart').toString().equals('0')) then false else true
@@ -97,8 +99,8 @@ package class ListsPane extends Pane {
                     (scrollY >= (totalHeight - clipHeight) and e.wheelRotation > 0)) {
                 return;
             } else {
-                var rotation = bind if (e.wheelRotation > 1) then 1 else -1;
-                scrollY += rotation * (listHeight + 1.0);
+                //var rotation = bind if (e.wheelRotation > 1) then 1 else -1;
+                scrollY += e.wheelRotation * (listHeight + 1.0);
                 scrollIndicatorOpacity = fadeinScrollOpacity;
                 //FIXME: do different math here
                 scrollIndicatorY = 45 + scrollY * 0.7 * (clipHeight / totalHeight);

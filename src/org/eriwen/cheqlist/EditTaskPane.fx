@@ -72,8 +72,8 @@ package class EditTaskPane extends Pane {
         insert SelectBoxItem { text: '', value: '' } into listsSelectBox.options;
         for (list in lists) {
             var listMap:LinkedHashMap = list as LinkedHashMap;
-            //Do not add smart lists to options
-            if ((listMap.get('smart') as String).equals('0')) {
+            //Do not add smart lists or archived to options
+            if ((listMap.get('smart') as String).equals('0') and (listMap.get('archived') as String).equals('0')) {
                 insert SelectBoxItem {
                     text: listMap.get('name') as String
                     value: listMap.get('id') as String
