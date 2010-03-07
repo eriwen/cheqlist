@@ -61,11 +61,11 @@ package class ListsPane extends Pane {
         spacing: 1
         focusTraversable: false
         width: theme.paneWidth, height: theme.paneHeight - 174
-        content: bind for (list in listsList) {
+        content: bind for (list in listsList where (list as Map).get('archived').equals('0')) {
             var listMap = list as Map;
             var listName = listMap.get('name').toString();
             var listId = listMap.get('id').toString();
-            RtmList {
+            var theList:RtmList = RtmList {
                 listId: listId
                 name: listName
                 smart: if (listMap.get('smart').toString().equals('0')) then false else true
