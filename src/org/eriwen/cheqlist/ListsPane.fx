@@ -96,10 +96,9 @@ package class ListsPane extends Pane {
         }
         onMouseWheelMoved: function(e:MouseEvent):Void {
             if ((scrollY <= 0 and e.wheelRotation < 0) or
-                    (scrollY >= (totalHeight - clipHeight) and e.wheelRotation > 0)) {
+                    (scrollY >= (totalHeight - clipHeight + listHeight) and e.wheelRotation > 0)) {
                 return;
             } else {
-                //var rotation = bind if (e.wheelRotation > 1) then 1 else -1;
                 scrollY += e.wheelRotation * (listHeight + 1.0);
                 scrollIndicatorOpacity = fadeinScrollOpacity;
                 //FIXME: do different math here

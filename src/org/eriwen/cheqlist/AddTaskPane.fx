@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 Eric Wendelin
+ *  Copyright 2010 Eric Wendelin
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ package class AddTaskPane extends Pane {
         for (list in lists) {
             var listMap:Map = list as LinkedHashMap;
             //Do not add smart lists to options
-            if ((listMap.get('smart') as String).equals('0')) {
+            if ((listMap.get('smart') as String).equals('0') and (listMap.get('archived') as String).equals('0')) {
                 insert SelectBoxItem {
                     text: listMap.get('name') as String
                     value: listMap.get('id') as String
