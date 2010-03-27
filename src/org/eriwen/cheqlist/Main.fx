@@ -74,9 +74,7 @@ var syncIntervalMillis:Integer = Integer.parseInt(settings.get('syncInterval').t
 var taskSort:String = settings.get('taskSort').toString() on replace {
     settings.put('taskSort', taskSort);
 };
-var curTimezoneOffset:Integer = Integer.parseInt(settings.get('curTimezoneOffset').toString()) on replace {
-    settings.put('curTimezoneOffset', curTimezoneOffset);
-};
+var curTimezoneOffset:Integer = 0;
 var taskFilter:String = settings.get('defaultTaskFilter').toString() on replace {
     settings.put('defaultTaskFilter', taskFilter)
 };
@@ -342,11 +340,9 @@ function onSettingsLoaded(result:Object):Void {
 function onTimezoneLoaded(result:Object):Void {
     splashScreenPane.progress += 20;
     var timezoneValue:String = result as String;
-    if (timezoneValue.equals("")) {
-        curTimezoneOffset = 0;
-    } else {
+    if (not timezoneValue.equals("")) {
         curTimezoneOffset = Integer.parseInt(result as String);
-    }
+    } 
     splashScreenPane.statusMessage = 'Loading tasks...';
     updateTasks();
 }
