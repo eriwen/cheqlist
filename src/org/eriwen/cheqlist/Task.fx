@@ -22,7 +22,6 @@ import javafx.scene.effect.Effect;
 import javafx.scene.effect.Glow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.TextAlignment;
 import javafx.scene.text.Text;
 
 import org.eriwen.cheqlist.theme.Theme;
@@ -63,7 +62,7 @@ public class Task extends CustomNode {
         }
         fill: bind theme.backgroundColor
     }
-    def taskPriority: Rectangle = Rectangle {
+    def taskPriority:Rectangle = Rectangle {
         width: 11, height: taskHeight,
         fill: bind if (priority.equals('1')) then theme.priority1Color
             else if (priority.equals('2')) then theme.priority2Color
@@ -71,27 +70,27 @@ public class Task extends CustomNode {
             else theme.priorityNColor
         effect: bind currentEffect
     }
-    def checkbox = CheckBox {
+    def checkbox:CheckBox = CheckBox {
         translateX: 17, translateY: 5,
         allowTriState: false, selected: false, blocksMouse: true,
         onMouseClicked: completeTaskAction
     }
     def taskDue:Text = Text {
-        var wrappingWidth = 60;
+        var maxWidth = 60;
         font: theme.detailFont
         fill: bind if (overdue) then theme.overdueTextColor else theme.dueDateTextColor
-        x: theme.paneWidth - wrappingWidth, y: 14
+        x: theme.paneWidth - maxWidth, y: 14
         //Align right
-        wrappingWidth: wrappingWidth, translateX: bind wrappingWidth - taskDue.boundsInLocal.width - 7, textAlignment: TextAlignment.RIGHT
+        translateX: bind maxWidth - taskDue.boundsInLocal.width - 7
         content: due
     }
-    def taskName = Label {
+    def taskName:Label = Label {
         translateX: 38
         font: theme.normalFont, text: name,
         textFill: bind theme.foregroundColor
         width: theme.paneWidth - 100
     }
-    def tagsLabel = Label {
+    def tagsLabel:Label = Label {
         translateX: 38, translateY: 16
         font: theme.detailFont, 
         text: if (tags != '') then "{listName}, {tags}"

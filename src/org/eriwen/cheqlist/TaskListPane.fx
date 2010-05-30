@@ -96,7 +96,7 @@ package class TaskListPane extends Pane {
 
     public def taskFilterBox:TextBox = TextBox {
         translateY: 3
-        width: theme.paneWidth - 64, height: 24
+        layoutInfo: LayoutInfo { width: theme.paneWidth - 64, height: 24 }
         focusTraversable: false, selectOnFocus: false
         promptText: 'Search'
         text: taskFilter

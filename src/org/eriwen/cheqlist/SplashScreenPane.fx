@@ -17,6 +17,7 @@ package org.eriwen.cheqlist;
 
 import javafx.scene.Node;
 import javafx.scene.Group;
+import javafx.scene.layout.LayoutInfo;
 import javafx.scene.text.*;
 
 import javafx.scene.control.ProgressBar;
@@ -46,7 +47,7 @@ package class SplashScreenPane extends Pane {
                 }
                 ProgressBar {
                     translateX: (theme.paneWidth / 2) - 75, translateY: (theme.paneHeight / 2) + 35
-                    height: 8
+                    layoutInfo: LayoutInfo { height: 8, width: 142 }
                     progress: bind ProgressBar.computeProgress(100, progress)
                 }
                 Text {

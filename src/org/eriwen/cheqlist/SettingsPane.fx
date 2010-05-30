@@ -208,10 +208,10 @@ package class SettingsPane extends Pane {
                     width: theme.paneWidth - 18, height: theme.paneHeight - 60,
                     id: 'settingsForm',
                     constraints: "fill, wrap",
-                    rows: "[]1mm[]1mm[]1mm[]1mm[]1mm[]1mm[]1mm[]1mm[]1mm[]1mm[]push[]2mm[]", columns: "[]2mm[]",
+                    rows: "[]3mm[]3mm[]3mm[]push[]2mm[]", columns: "[]2mm[]",
                     content: [
                         migNode(colorPicker, "ax right"), migNode(colorSettingSelectBox, "ax left"),
-                        migNode(showTooltipsCheckbox, "ax right, gapx 40px 0px"), migNode(createLabel("Show tooltips"), "ax left"),
+                        migNode(showTooltipsCheckbox, "ax left, gapx 70px 0px"), migNode(createLabel("Show tooltips"), "ax left"),
                         //migNode(createLabel("Show completed tasks"), "ax right"), migNode(showCompletedCheckbox, "ax left"),
                         migNode(syncIntervalSelectBox, "ax right"), migNode(createLabel("Between RTM syncs"), "ax left"),
                         migNode(taskSortSelectBox, "ax right"), migNode(createLabel("To sort tasks"), "ax left"),

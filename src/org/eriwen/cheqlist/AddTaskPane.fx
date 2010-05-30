@@ -93,40 +93,51 @@ package class AddTaskPane extends Pane {
     def locationsSelectBox = SelectBox {
         layoutInfo: selectBoxLayoutInfo
     }
+    def noteTextBox:TextBox = TextBox {
+        multiline: true, selectOnFocus: true, columns: 26, lines: 3
+    }
 
     def addTaskButton:Button = Button { text: "Add Task", action: addTask }
     def clearButton:Button = Button { text: "Clear", action: resetForm }
 
     function createLabel(text:String) {
-        Label { text: text, textFill: bind theme.foregroundColor, width: 80, height: 26 }
+        Label { text: text, textFill: bind theme.foregroundColor, width: 100, height: 26 }
     }
     function createTextField(id:String) {
-        TextBox { id: id, selectOnFocus: true, columns: 22 }
+        TextBox { id: id, selectOnFocus: true, columns: 26 }
     }
 
     function resetForm():Void {
-        nameField.text = '';
-        dueField.text = '';
-        estimateField.text = '';
-        repeatField.text = '';
-        tagsField.text = '';
-        urlField.text = '';
+        nameField.clear();
+        dueField.clear();
+        estimateField.clear();
+        repeatField.clear();
+        tagsField.clear();
+        urlField.clear();
         prioritySelectBox.select(0);
         listsSelectBox.select(0);
         locationsSelectBox.select(0);
+        noteTextBox.clear();
     }
 
     function addTask():Void {
         if (not nameField.text.equals('')) {
             toaster.show('Adding Task...');
+            var newTask:Map;
             rtmUtils.asyncTask(function () {
-                var newTask:Map = rtm.tasksAdd(nameField.text,
+                newTask = rtm.tasksAdd(nameField.text,
                         (prioritySelectBox.selectedItem as SelectBoxItem).value.toString(),
                         dueField.text, estimateField.text, repeatField.text, tagsField.text,
                         (locationsSelectBox.selectedItem as SelectBoxItem).value.toString(), urlField.text,
                         (listsSelectBox.selectedItem as SelectBoxItem).value.toString());
             }, function (result):Void {
                 if (result != null) {
+                    if (not noteTextBox.text.equals('')) {
+                        rtm.tasksNotesAdd(newTask.get('list_id').toString(),
+                        newTask.get('taskseries_id').toString(),
+                        newTask.get('task_id').toString(), 'Note1', noteTextBox.text);
+                    }
+
                     nameField.requestFocus();
                     toaster.showTimed('"{nameField.text}" added!', 2s);
                     resetForm();
@@ -152,7 +163,7 @@ package class AddTaskPane extends Pane {
                     width: theme.paneWidth - 18, height: theme.paneHeight - 40
                     id: 'addTaskForm'
                     constraints: "fill, wrap"
-                    rows: "[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]4mm[]"
+                    rows: "[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]push[]"
                     columns: "[]2mm[]"
                     content: [
                         migNode(createLabel("Name:"), "ax right"), migNode(nameField, "growx"),
@@ -164,6 +175,7 @@ package class AddTaskPane extends Pane {
                         migNode(createLabel("Tags:"), "ax right"), migNode(tagsField, "growx"),
                         migNode(createLabel("URL:"), "ax right"), migNode(urlField, "growx"),
                         migNode(createLabel("Location:"), "ax right"), migNode(locationsSelectBox, "growx"),
+                        migNode(createLabel("Note:"), "ax right"), migNode(noteTextBox, "growx"),
                         migNode(addTaskButton, "sx, growx")
                     ]
                 },

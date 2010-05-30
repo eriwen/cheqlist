@@ -96,6 +96,8 @@ package class EditTaskPane extends Pane {
         locationsSelectBox.select(0);
     };
 
+    //TODO: show notes
+
     init {
         prioritySelectBox.select(0);
         initialized = true;
@@ -120,7 +122,8 @@ package class EditTaskPane extends Pane {
         if (initialized) {
             if((prioritySelectBox.selectedItem as SelectBoxItem).value.toString() != task.get('priority').toString()) {
                 rtmUtils.asyncTask(function () {
-                    rtm.tasksSetPriority(listId, taskSeriesId, taskId, (prioritySelectBox.selectedItem as SelectBoxItem).value.toString());
+                    rtm.tasksSetPriority(listId, taskSeriesId, taskId,
+                            (prioritySelectBox.selectedItem as SelectBoxItem).value.toString());
                     updateTaskListAction();
                     }, function (result):Void {}, function (e:ExecutionException):Void {
                         toaster.showTimed(e.getCause().getMessage());
@@ -155,7 +158,8 @@ package class EditTaskPane extends Pane {
     def location:String = bind (locationsSelectBox.selectedItem as SelectBoxItem).value.toString() on replace {
         if((locationsSelectBox.selectedItem as SelectBoxItem).value.toString() != task.get('location_id').toString()) {
             rtmUtils.asyncTask(function () {
-                rtm.tasksSetLocation(listId, taskSeriesId, taskId, (locationsSelectBox.selectedItem as SelectBoxItem).value.toString());
+                rtm.tasksSetLocation(listId, taskSeriesId, taskId,
+                    (locationsSelectBox.selectedItem as SelectBoxItem).value.toString());
                 }, function (result):Void {}, function (e:ExecutionException):Void {
                     toaster.showTimed(e.getCause().getMessage());
                 }
@@ -163,6 +167,9 @@ package class EditTaskPane extends Pane {
         }
     }
 
+    def noteTextBox:TextBox = TextBox {
+        multiline: true, selectOnFocus: true, columns: 26, lines: 3
+    }
     def completeTaskButton:Button = Button {
         text: "Complete Task",
         action: completeTask
@@ -180,16 +187,13 @@ package class EditTaskPane extends Pane {
     }
 
     function createLabel(text:String) {
-        Label { 
-            width: 80, height: 26
-            text: text, textFill: bind theme.foregroundColor
-        }
+        Label { text: text, textFill: bind theme.foregroundColor, width: 100, height: 26 }
     }
     function createTextField(onchanged:function(String)) {
         LiveEditTextBox { 
             selectOnFocus: true
             blocksMouse: true
-            columns: 22
+            columns: 26
             onChange: onchanged
         }
     }
@@ -206,7 +210,8 @@ package class EditTaskPane extends Pane {
         }
     }
     function onDueChanged(value:String) {
-        if(value != strUtils.formatFriendlyDate(task.get('due').toString(), task.get('has_due_time').toString(), timezoneOffset)) {
+        if(value != strUtils.formatFriendlyDate(task.get('due').toString(),
+                task.get('has_due_time').toString(), timezoneOffset)) {
             rtmUtils.asyncTask(function () {
                 rtm.tasksSetDueDate(listId, taskSeriesId, taskId, value, true, true);
                 updateTaskListAction();
@@ -308,7 +313,7 @@ package class EditTaskPane extends Pane {
                     width: theme.paneWidth - 18, height: theme.paneHeight - 40
                     id: 'editTaskForm'
                     constraints: "fill, wrap"
-                    rows: "[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]4mm[]2mm[]2mm[]"
+                    rows: "[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]push[]1mm[]1mm[]"
                     columns: "[]2mm[]"
                     content: [
                         migNode(createLabel("Name:"), "ax right"), migNode(nameField, "growx"),
@@ -320,6 +325,7 @@ package class EditTaskPane extends Pane {
                         migNode(createLabel("Tags:"), "ax right"), migNode(tagsField, "growx"),
                         migNode(createLabel("URL:"), "ax right"), migNode(urlField, "growx"),
                         migNode(createLabel("Location:"), "ax right"), migNode(locationsSelectBox, "growx"),
+                        migNode(createLabel("Note:"), "ax right"), migNode(noteTextBox, "growx"),
                         migNode(completeTaskButton, "sx, growx"),
                         migNode(postponeTaskButton, "sx, growx"),
                         migNode(deleteTaskButton, "sx, growx")
