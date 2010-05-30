@@ -22,8 +22,8 @@ import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.LayoutInfo;
 
-import org.jfxtras.scene.layout.MigLayout;
-import org.jfxtras.scene.layout.MigLayout.*;
+import org.jfxtras.scene.layout.XMigLayout;
+import org.jfxtras.scene.layout.XMigLayout.*;
 
 import org.eriwen.cheqlist.control.SelectBox;
 import org.eriwen.cheqlist.control.SelectBoxItem;
@@ -147,7 +147,7 @@ package class AddTaskPane extends Pane {
         return Group {
             content: [
                 background, panelTitle, backButton,
-                MigLayout {
+                XMigLayout {
                     translateX: 9, translateY: 30
                     width: theme.paneWidth - 18, height: theme.paneHeight - 40
                     id: 'addTaskForm'

@@ -24,8 +24,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.LayoutInfo;
 import javafx.scene.paint.Color;
 
-import org.jfxtras.scene.layout.MigLayout;
-import org.jfxtras.scene.layout.MigLayout.*;
+import org.jfxtras.scene.layout.XMigLayout;
+import org.jfxtras.scene.layout.XMigLayout.*;
 
 import org.eriwen.cheqlist.control.ColorPicker;
 import org.eriwen.cheqlist.control.SelectBox;
@@ -203,7 +203,7 @@ package class SettingsPane extends Pane {
         return Group {
             content: [
                 background, panelTitle, backButton,
-                MigLayout {
+                XMigLayout {
                     translateX: 9, translateY: 50
                     width: theme.paneWidth - 18, height: theme.paneHeight - 60,
                     id: 'settingsForm',

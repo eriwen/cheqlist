@@ -24,8 +24,8 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.LayoutInfo;
 
-import org.jfxtras.scene.layout.MigLayout;
-import org.jfxtras.scene.layout.MigLayout.*;
+import org.jfxtras.scene.layout.XMigLayout;
+import org.jfxtras.scene.layout.XMigLayout.*;
 
 import org.eriwen.rtm.RtmService;
 import org.eriwen.cheqlist.control.LiveEditTextBox;
@@ -303,7 +303,7 @@ package class EditTaskPane extends Pane {
         return Group {
             content: [
                 background, panelTitle, backButton,
-                MigLayout {
+                XMigLayout {
                     translateX: 9, translateY: 30
                     width: theme.paneWidth - 18, height: theme.paneHeight - 40
                     id: 'editTaskForm'
