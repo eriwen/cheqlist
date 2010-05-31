@@ -15,6 +15,8 @@
  */
 package org.eriwen.cheqlist;
 
+import java.util.concurrent.ExecutionException;
+
 import javafx.scene.Cursor;
 import javafx.scene.CustomNode;
 import javafx.scene.Group;
@@ -25,6 +27,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.*;
+
 import org.eriwen.cheqlist.theme.*;
 
 /**
@@ -74,5 +77,9 @@ public abstract class Pane extends CustomNode {
     package def toaster = Toaster {
         toasterHeight: 40
         theme: theme
+    }
+
+    package function showToasterError(e:ExecutionException):Void {
+        toaster.show(e.getCause().getMessage());
     }
 }

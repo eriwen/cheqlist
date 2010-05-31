@@ -47,7 +47,7 @@ package class SplashScreenPane extends Pane {
                 }
                 ProgressBar {
                     translateX: (theme.paneWidth / 2) - 75, translateY: (theme.paneHeight / 2) + 35
-                    layoutInfo: LayoutInfo { height: 8, width: 142 }
+                    layoutInfo: LayoutInfo { height: 7, width: 142 }
                     progress: bind ProgressBar.computeProgress(100, progress)
                 }
                 Text {

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 Eric Wendelin
+ *  Copyright 2010 Eric Wendelin
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,39 +15,20 @@
  */
 package org.eriwen.cheqlist.control;
 
-import javafx.scene.control.Control;
+import javafx.scene.control.ChoiceBox;
 
 /**
- * @author Eric Wendelin
+ * @author <a href="http://eriwen.com">Eric Wendelin</a>
  */
+public class SelectBox extends ChoiceBox {
+    override public def items = [] as SelectBoxItem[];
 
-public class SelectBox extends Control {
-    override var skin = SelectBoxSkin {};
-
-    public var options:SelectBoxItem[] = [];
-    public-read var selectedItem = bind (skin as SelectBoxSkin).listView.selectedItem;
-
-    public function select(index:Integer):Void {
-        (skin as SelectBoxSkin).listView.select(index);
-    }
     public function selectByValue(value:String):Void {
-        for (entry in [0..(sizeof options - 1)]) {
-            if (options[entry].value.equals(value)) {
+        for (entry in [0..(sizeof items - 1)]) {
+            if ((items[entry] as SelectBoxItem).value.equals(value)) {
                 select(entry);
                 break;
             }
         }
-    }
-    public function selectFirstRow():Void {
-        (skin as SelectBoxSkin).listView.selectFirstRow();
-    }
-    public function selectLastRow():Void {
-        (skin as SelectBoxSkin).listView.selectLastRow();
-    }
-    public function selectNextRow():Void {
-        (skin as SelectBoxSkin).listView.selectNextRow();
-    }
-    public function selectPreviousRow():Void {
-        (skin as SelectBoxSkin).listView.selectPreviousRow();
     }
 }

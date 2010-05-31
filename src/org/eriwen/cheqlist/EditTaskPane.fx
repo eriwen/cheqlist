@@ -23,13 +23,13 @@ import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.LayoutInfo;
+import javafx.scene.layout.VBox;
 
 import org.jfxtras.scene.layout.XMigLayout;
 import org.jfxtras.scene.layout.XMigLayout.*;
 
 import org.eriwen.rtm.RtmService;
 import org.eriwen.cheqlist.control.LiveEditTextBox;
-import org.eriwen.cheqlist.control.SelectBox;
 import org.eriwen.cheqlist.control.SelectBoxItem;
 import org.eriwen.cheqlist.util.GroovyRtmUtils;
 import org.eriwen.cheqlist.util.StringUtils;
@@ -37,10 +37,9 @@ import org.eriwen.cheqlist.util.StringUtils;
 /**
  * The pane for editing a task. Must be initialized with a task
  *
- * @author Eric Wendelin
+ * @author <a href="http://eriwen.com">Eric Wendelin</a>
  */
-
-package class EditTaskPane extends Pane {
+package class EditTaskPane extends TaskPaneBase {
     public-init var timezoneOffset:Integer;
     public-init var rtm:RtmService;
     public-init var rtmUtils:GroovyRtmUtils;
@@ -66,38 +65,6 @@ package class EditTaskPane extends Pane {
     package var updateTaskListAction:function();
     var initialized = false;
 
-    package var lists:List on replace {
-        //Add options to List combo box
-        delete listsSelectBox.options;
-        insert SelectBoxItem { text: '', value: '' } into listsSelectBox.options;
-        for (list in lists) {
-            var listMap:LinkedHashMap = list as LinkedHashMap;
-            //Do not add smart lists or archived to options
-            if ((listMap.get('smart') as String).equals('0') and (listMap.get('archived') as String).equals('0')) {
-                insert SelectBoxItem {
-                    text: listMap.get('name') as String
-                    value: listMap.get('id') as String
-                } into listsSelectBox.options
-            }
-        }
-        listsSelectBox.select(0);
-    };
-    package var locations:List on replace {
-        //Add options for locations box
-        insert SelectBoxItem { text: '', value: '' } into locationsSelectBox.options;
-        for (loc in locations) {
-            var locMap:LinkedHashMap = loc as LinkedHashMap;
-            var item = SelectBoxItem {
-                text: locMap.get('name') as String
-                value: locMap.get('id') as String
-            }
-            insert item into locationsSelectBox.options
-        }
-        locationsSelectBox.select(0);
-    };
-
-    //TODO: show notes
-
     init {
         prioritySelectBox.select(0);
         initialized = true;
@@ -109,15 +76,7 @@ package class EditTaskPane extends Pane {
     def estimateField = createTextField(onEstimateChanged);
     def tagsField = createTextField(onTagsChanged);
     def urlField = createTextField(onUrlChanged);
-    def prioritySelectBox:SelectBox = SelectBox {
-        options: [
-            SelectBoxItem { text: 'None', value: 'N' }
-            SelectBoxItem { text: 'Low', value: '3' }
-            SelectBoxItem { text: 'Medium', value: '2' }
-            SelectBoxItem { text: 'High', value: '1' }
-        ]
-        layoutInfo: LayoutInfo { width: 150, height: 26 }
-    }
+
     def priority:String = bind (prioritySelectBox.selectedItem as SelectBoxItem).value.toString() on replace {
         if (initialized) {
             if((prioritySelectBox.selectedItem as SelectBoxItem).value.toString() != task.get('priority').toString()) {
@@ -125,44 +84,28 @@ package class EditTaskPane extends Pane {
                     rtm.tasksSetPriority(listId, taskSeriesId, taskId,
                             (prioritySelectBox.selectedItem as SelectBoxItem).value.toString());
                     updateTaskListAction();
-                    }, function (result):Void {}, function (e:ExecutionException):Void {
-                        toaster.showTimed(e.getCause().getMessage());
-                    }
+                    }, function (result):Void {}, showToasterError
                 );
             }
         }
     }
 
-    def listsSelectBox:SelectBox = SelectBox {
-        layoutInfo: LayoutInfo { width: 150, height: 26 }
-        options: []
-        blocksMouse: true
-    }
     def list:String = bind (listsSelectBox.selectedItem as SelectBoxItem).value.toString() on replace {
         if((listsSelectBox.selectedItem as SelectBoxItem).value.toString() != task.get('list_id').toString()) {
             rtmUtils.asyncTask(function () {
                 rtm.tasksMoveTo(listId, taskSeriesId, taskId, (listsSelectBox.selectedItem as SelectBoxItem).value.toString());
                 updateTaskListAction();
-                }, function (result):Void {}, function (e:ExecutionException):Void {
-                    toaster.showTimed(e.getCause().getMessage());
-                }
+                }, function (result):Void {}, showToasterError
             );
         }
     }
 
-    def locationsSelectBox:SelectBox = SelectBox {
-        layoutInfo: LayoutInfo { width: 150, height: 26 }
-        options: []
-        blocksMouse: true
-    }
     def location:String = bind (locationsSelectBox.selectedItem as SelectBoxItem).value.toString() on replace {
         if((locationsSelectBox.selectedItem as SelectBoxItem).value.toString() != task.get('location_id').toString()) {
             rtmUtils.asyncTask(function () {
                 rtm.tasksSetLocation(listId, taskSeriesId, taskId,
                     (locationsSelectBox.selectedItem as SelectBoxItem).value.toString());
-                }, function (result):Void {}, function (e:ExecutionException):Void {
-                    toaster.showTimed(e.getCause().getMessage());
-                }
+                }, function (result):Void {}, showToasterError
             );
         }
     }
@@ -173,10 +116,12 @@ package class EditTaskPane extends Pane {
     def completeTaskButton:Button = Button {
         text: "Complete Task",
         action: completeTask
+        layoutInfo: LayoutInfo { width: theme.paneWidth - 18 }
     }
     def postponeTaskButton:Button = Button {
         text: "Postpone Task",
         action: postponeTask
+        layoutInfo: LayoutInfo { width: theme.paneWidth - 18 }
     }
     def deleteTaskButton:Button = Button {
         text: "Delete Task"
@@ -184,11 +129,15 @@ package class EditTaskPane extends Pane {
         effect: ColorAdjust {
             hue: 0.0, saturation: 0.6
         }
+        layoutInfo: LayoutInfo { width: theme.paneWidth - 18 }
     }
 
-    function createLabel(text:String) {
-        Label { text: text, textFill: bind theme.foregroundColor, width: 100, height: 26 }
+    def bottomButtons:VBox = VBox {
+        translateX: 9, translateY: theme.paneHeight - 75
+        spacing: 5
+        content: [completeTaskButton, postponeTaskButton, deleteTaskButton]
     }
+
     function createTextField(onchanged:function(String)) {
         LiveEditTextBox { 
             selectOnFocus: true
@@ -203,9 +152,7 @@ package class EditTaskPane extends Pane {
             rtmUtils.asyncTask(function () {
                 rtm.tasksSetName(listId, taskSeriesId, taskId, value);
                 updateTaskListAction();
-                }, function (result):Void {}, function (e:ExecutionException):Void {
-                    toaster.show(e.getCause().getMessage());
-                }
+                }, function (result):Void {}, showToasterError
             );
         }
     }
@@ -215,9 +162,7 @@ package class EditTaskPane extends Pane {
             rtmUtils.asyncTask(function () {
                 rtm.tasksSetDueDate(listId, taskSeriesId, taskId, value, true, true);
                 updateTaskListAction();
-                }, function (result):Void {}, function (e:ExecutionException):Void {
-                    toaster.show(e.getCause().getMessage());
-                }
+                }, function (result):Void {}, showToasterError
             );
         }
     }
@@ -225,9 +170,7 @@ package class EditTaskPane extends Pane {
         if(value != strUtils.formatFriendlyRepeat(task.get('repeat').toString())) {
             rtmUtils.asyncTask(function () {
                 rtm.tasksSetRecurrence(listId, taskSeriesId, taskId, value);
-                }, function (result):Void {}, function (e:ExecutionException):Void {
-                    toaster.show(e.getCause().getMessage());
-                }
+                }, function (result):Void {}, showToasterError
             );
         }
     }
@@ -235,9 +178,7 @@ package class EditTaskPane extends Pane {
         if (value != task.get('estimate').toString()) {
             rtmUtils.asyncTask(function () {
                 rtm.tasksSetEstimate(listId, taskSeriesId, taskId, value);
-                }, function (result):Void {}, function (e:ExecutionException):Void {
-                    toaster.show(e.getCause().getMessage());
-                }
+                }, function (result):Void {}, showToasterError
             );
         }
     }
@@ -246,9 +187,7 @@ package class EditTaskPane extends Pane {
             rtmUtils.asyncTask(function () {
                 rtm.tasksSetTags(listId, taskSeriesId, taskId, value);
                 updateTaskListAction();
-                }, function (result):Void {}, function (e:ExecutionException):Void {
-                    toaster.show(e.getCause().getMessage());
-                }
+                }, function (result):Void {}, showToasterError
             );
         }
     }
@@ -256,9 +195,7 @@ package class EditTaskPane extends Pane {
         if(value != task.get('url').toString()) {
             rtmUtils.asyncTask(function () {
                 rtm.tasksSetUrl(listId, taskSeriesId, taskId, value);
-                }, function (result):Void {}, function (e:ExecutionException):Void {
-                    toaster.show(e.getCause().getMessage());
-                }
+                }, function (result):Void {}, showToasterError
             );
         }
     }
@@ -270,9 +207,7 @@ package class EditTaskPane extends Pane {
                 updateTaskListAction();
             }, function (result):Void {
                 closeAction(new MouseEvent());
-            }, function (e:ExecutionException):Void {
-                toaster.show(e.getCause().getMessage());
-            }
+            }, showToasterError
         );
     }
 
@@ -283,9 +218,7 @@ package class EditTaskPane extends Pane {
                 updateTaskListAction();
             }, function (result):Void {
                 closeAction(new MouseEvent());
-            }, function (e:ExecutionException):Void {
-                toaster.show(e.getCause().getMessage());
-            }
+            }, showToasterError
         );
     }
 
@@ -296,11 +229,11 @@ package class EditTaskPane extends Pane {
                 updateTaskListAction();
             }, function (result):Void {
                 closeAction(new MouseEvent());
-            }, function (e:ExecutionException):Void {
-                toaster.showTimed(e.getCause().getMessage());
-            }
+            }, showToasterError
         );
     }
+
+    //TODO: show notes
 
     override public function create():Node {
         toaster.hide();
@@ -310,10 +243,10 @@ package class EditTaskPane extends Pane {
                 background, panelTitle, backButton,
                 XMigLayout {
                     translateX: 9, translateY: 30
-                    width: theme.paneWidth - 18, height: theme.paneHeight - 40
+                    width: theme.paneWidth - 18, height: theme.paneHeight - 100
                     id: 'editTaskForm'
                     constraints: "fill, wrap"
-                    rows: "[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]push[]1mm[]1mm[]"
+                    rows: "[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]"
                     columns: "[]2mm[]"
                     content: [
                         migNode(createLabel("Name:"), "ax right"), migNode(nameField, "growx"),
@@ -324,13 +257,11 @@ package class EditTaskPane extends Pane {
                         migNode(createLabel("Estimate:"), "ax right"), migNode(estimateField, "growx"),
                         migNode(createLabel("Tags:"), "ax right"), migNode(tagsField, "growx"),
                         migNode(createLabel("URL:"), "ax right"), migNode(urlField, "growx"),
-                        migNode(createLabel("Location:"), "ax right"), migNode(locationsSelectBox, "growx"),
-                        migNode(createLabel("Note:"), "ax right"), migNode(noteTextBox, "growx"),
-                        migNode(completeTaskButton, "sx, growx"),
-                        migNode(postponeTaskButton, "sx, growx"),
-                        migNode(deleteTaskButton, "sx, growx")
+                        migNode(createLabel("Location:"), "ax right"), migNode(locationsSelectBox, "growx")
+//                        migNode(createLabel("Note:"), "ax right"), migNode(noteTextBox, "growx")
                     ]
                 },
+                bottomButtons,
                 toaster
             ]
         }

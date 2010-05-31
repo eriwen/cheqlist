@@ -16,61 +16,29 @@
 package org.eriwen.cheqlist;
 
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.LayoutInfo;
+import javafx.scene.layout.VBox;
 
 import org.jfxtras.scene.layout.XMigLayout;
 import org.jfxtras.scene.layout.XMigLayout.*;
 
-import org.eriwen.cheqlist.control.SelectBox;
 import org.eriwen.cheqlist.control.SelectBoxItem;
 import org.eriwen.cheqlist.util.GroovyRtmUtils;
 import org.eriwen.rtm.RtmService;
 
 /**
- * View for the Add Task form
+ * View for the Add Task form.
  *
  * @author <a href="http://eriwen.com">Eric Wendelin</a>
  */
-
-package class AddTaskPane extends Pane {
+package class AddTaskPane extends TaskPaneBase {
     public-init var updateTaskListAction:function();
     public-init var addTaskAction:function();
     public-init var rtm:RtmService;
     public-init var rtmUtils:GroovyRtmUtils;
-    def selectBoxLayoutInfo = LayoutInfo { width: 170, height: 26 }
-
-    package var lists:List on replace {
-        //Add options to List combo box
-        delete listsSelectBox.options;
-        insert SelectBoxItem { text: '', value: '' } into listsSelectBox.options;
-        for (list in lists) {
-            var listMap:Map = list as LinkedHashMap;
-            //Do not add smart lists to options
-            if ((listMap.get('smart') as String).equals('0') and (listMap.get('archived') as String).equals('0')) {
-                insert SelectBoxItem {
-                    text: listMap.get('name') as String
-                    value: listMap.get('id') as String
-                } into listsSelectBox.options
-            }
-        }
-        listsSelectBox.select(0);
-    };
-    package var locations:List on replace {
-        //Add options for locations box
-        insert SelectBoxItem { text: '', value: '' } into locationsSelectBox.options;
-        for (loc in locations) {
-            var locMap:Map = loc as LinkedHashMap;
-            insert SelectBoxItem {
-                text: locMap.get('name') as String
-                value: locMap.get('id') as String
-            } into locationsSelectBox.options
-        }
-        locationsSelectBox.select(0);
-    };
 
     def nameField = createTextField("fieldName");
     def dueField = createTextField("fieldDue");
@@ -78,33 +46,23 @@ package class AddTaskPane extends Pane {
     def estimateField = createTextField("fieldEstimate");
     def tagsField = createTextField("fieldTags");
     def urlField = createTextField("fieldURL");
-    def prioritySelectBox = SelectBox {
-        options: [
-            SelectBoxItem { text: 'None', value: 'N' }
-            SelectBoxItem { text: 'Low', value: '3' }
-            SelectBoxItem { text: 'Medium', value: '2' }
-            SelectBoxItem { text: 'High', value: '1' }
-        ]
-        layoutInfo: selectBoxLayoutInfo
-    }
-    def listsSelectBox = SelectBox {
-        layoutInfo: selectBoxLayoutInfo
-    }
-    def locationsSelectBox = SelectBox {
-        layoutInfo: selectBoxLayoutInfo
-    }
+
     def noteTextBox:TextBox = TextBox {
         multiline: true, selectOnFocus: true, columns: 26, lines: 3
     }
 
-    def addTaskButton:Button = Button { text: "Add Task", action: addTask }
-    def clearButton:Button = Button { text: "Clear", action: resetForm }
-
-    function createLabel(text:String) {
-        Label { text: text, textFill: bind theme.foregroundColor, width: 100, height: 26 }
+    def addTaskButton:Button = Button { 
+        text: "Add Task", action: addTask
+        layoutInfo: LayoutInfo { width: theme.paneWidth - 18 }
     }
-    function createTextField(id:String) {
-        TextBox { id: id, selectOnFocus: true, columns: 26 }
+    def clearButton:Button = Button { 
+        text: "Clear", action: resetForm
+        layoutInfo: LayoutInfo { width: theme.paneWidth - 18 }
+    }
+    def bottomButtons:VBox = VBox {
+        translateX: 9, translateY: theme.paneHeight - 60
+        spacing: 5
+        content: [addTaskButton, clearButton]
     }
 
     function resetForm():Void {
@@ -143,9 +101,7 @@ package class AddTaskPane extends Pane {
                     resetForm();
                     updateTaskListAction();
                 }
-            }, function (e:ExecutionException):Void {
-                toaster.showTimed(e.getCause().getMessage());
-            });
+            }, showToasterError);
         } else {
             toaster.showTimed('Task name cannot be blank', 2s);
         }
@@ -160,10 +116,10 @@ package class AddTaskPane extends Pane {
                 background, panelTitle, backButton,
                 XMigLayout {
                     translateX: 9, translateY: 30
-                    width: theme.paneWidth - 18, height: theme.paneHeight - 40
+                    width: theme.paneWidth - 18, height: theme.paneHeight - 80
                     id: 'addTaskForm'
                     constraints: "fill, wrap"
-                    rows: "[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]push[]"
+                    rows: "[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]2mm[]6mm[]"
                     columns: "[]2mm[]"
                     content: [
                         migNode(createLabel("Name:"), "ax right"), migNode(nameField, "growx"),
@@ -175,10 +131,10 @@ package class AddTaskPane extends Pane {
                         migNode(createLabel("Tags:"), "ax right"), migNode(tagsField, "growx"),
                         migNode(createLabel("URL:"), "ax right"), migNode(urlField, "growx"),
                         migNode(createLabel("Location:"), "ax right"), migNode(locationsSelectBox, "growx"),
-                        migNode(createLabel("Note:"), "ax right"), migNode(noteTextBox, "growx"),
-                        migNode(addTaskButton, "sx, growx")
+                        migNode(createLabel("Note:"), "ax right"), migNode(noteTextBox, "growx")
                     ]
                 },
+                bottomButtons,
                 toaster
             ]
         }

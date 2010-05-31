@@ -84,7 +84,7 @@ package class ListsPane extends Pane {
     var scrollY:Number = 0.0 on replace {
         listsListClipView.clipY = scrollY;
     };
-    def totalHeight = bind (listHeight + 1.0) * sizeof listsList + 1.0;
+    def totalHeight = bind (listHeight + 1.0) * (sizeof listsList + 1.0);
     def clipHeight = 370.0;
 
     def listsListClipView:ClipView = ClipView {

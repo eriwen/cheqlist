@@ -168,7 +168,7 @@ package class TaskListPane extends Pane {
     var scrollY:Number = 0.0 on replace {
         taskListClipView.clipY = scrollY;
     };
-    def totalHeight = bind (taskHeight + 1.0) * sizeof taskList + 1.0;
+    def totalHeight = bind (taskHeight + 1.0) * (sizeof taskList + 1.0);
     def clipHeight = 415.0;
 
     def taskListClipView:ClipView = ClipView {

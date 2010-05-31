@@ -22,6 +22,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.LayoutInfo;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 import org.jfxtras.scene.layout.XMigLayout;
@@ -36,7 +37,7 @@ import javafx.animation.Timeline;
 /**
  * Pane containing cheqlist settings
  * 
- * @author Eric Wendelin
+ * @author <a href="http://eriwen.com">Eric Wendelin</a>
  */
 
 package class SettingsPane extends Pane {
@@ -97,7 +98,7 @@ package class SettingsPane extends Pane {
     }
 
     def syncIntervalSelectBox:SelectBox = SelectBox {
-        options: [
+        items: [
             SelectBoxItem { text: '1 minute', value: '60000' }
             SelectBoxItem { text: '2 minutes', value: '120000' }
             SelectBoxItem { text: '5 minutes', value: '300000' }
@@ -105,7 +106,7 @@ package class SettingsPane extends Pane {
             SelectBoxItem { text: '1 hour', value: '3600000' }
             SelectBoxItem { text: 'Never', value: '999999999' }
         ]
-        layoutInfo: LayoutInfo { width: 80, height: 26 }
+        width: 100, height: 26
     }
     var syncInterval:String = bind (syncIntervalSelectBox.selectedItem as SelectBoxItem).value.toString() on replace {
         var syncIntervalString = (syncIntervalSelectBox.selectedItem as SelectBoxItem).value.toString();
@@ -120,7 +121,7 @@ package class SettingsPane extends Pane {
     var currentColorStr:String = null;
     var colorsInitialized:Boolean = false;
     def colorPicker:ColorPicker = ColorPicker { color: currentColor, colorStr: currentColorStr };
-    var color:Color = bind colorPicker.color with inverse on replace {
+    var color:Color = bind colorPicker.color on replace {
         if (colorsInitialized) {
             if (currentColorSetting.equals('foregroundColor')) {
                 theme.foregroundColor = colorPicker.color;
@@ -145,7 +146,7 @@ package class SettingsPane extends Pane {
     }
 
     def colorSettingSelectBox:SelectBox = SelectBox {
-        options: [
+        items: [
             SelectBoxItem { text: 'Foreground', value: 'foregroundColor' }
             SelectBoxItem { text: 'Secondary', value: 'secondaryForegroundColor' }
             SelectBoxItem { text: 'Background', value: 'backgroundColor' }
@@ -155,7 +156,7 @@ package class SettingsPane extends Pane {
             SelectBoxItem { text: 'Low Priority', value: 'priority3Color' }
             SelectBoxItem { text: 'No Priority', value: 'priorityNColor' }
         ]
-        layoutInfo: LayoutInfo { width: 150, height: 26 }
+        width: 150, height: 26
     }
     var currentColorSetting:String = bind (colorSettingSelectBox.selectedItem as SelectBoxItem).value.toString() on replace {
         //when select box changes, update colorPicker.color to stored setting
@@ -165,13 +166,13 @@ package class SettingsPane extends Pane {
     }
 
     def taskSortSelectBox:SelectBox = SelectBox {
-        options: [
+        items: [
             SelectBoxItem { text: 'Due & Priority', value: 'smart' }
             SelectBoxItem { text: 'Due Date', value: 'due' }
             SelectBoxItem { text: 'Priority', value: 'priority' }
             SelectBoxItem { text: 'Task Name', value: 'name' }
         ]
-        layoutInfo: LayoutInfo { width: 80, height: 26 }
+        width: 100, height: 26
     }
     var taskSort:String = bind (taskSortSelectBox.selectedItem as SelectBoxItem).value.toString() on replace {
         var taskSortString = (taskSortSelectBox.selectedItem as SelectBoxItem).value.toString();
@@ -183,6 +184,7 @@ package class SettingsPane extends Pane {
     def resetDefaultButton:Button = Button {
         text: "Reset to defaults"
         action: resetAction
+        layoutInfo: LayoutInfo { width: theme.paneWidth - 18 }
     }
 
     def logoutButton:Button = Button {
@@ -191,6 +193,13 @@ package class SettingsPane extends Pane {
         effect: ColorAdjust {
             hue: 0.0, saturation: 0.6
         }
+        layoutInfo: LayoutInfo { width: theme.paneWidth - 18 }
+    }
+
+    def bottomButtons:VBox = VBox {
+        translateX: 9, translateY: theme.paneHeight - 60
+        spacing: 5
+        content: [resetDefaultButton, logoutButton]
     }
 
     override public function create():Node {
@@ -205,20 +214,19 @@ package class SettingsPane extends Pane {
                 background, panelTitle, backButton,
                 XMigLayout {
                     translateX: 9, translateY: 50
-                    width: theme.paneWidth - 18, height: theme.paneHeight - 60,
+                    width: theme.paneWidth - 18, height: theme.paneHeight - 100,
                     id: 'settingsForm',
                     constraints: "fill, wrap",
-                    rows: "[]3mm[]3mm[]3mm[]push[]2mm[]", columns: "[]2mm[]",
+                    rows: "[]3mm[]3mm[]3mm[]", columns: "[]2mm[]",
                     content: [
                         migNode(colorPicker, "ax right"), migNode(colorSettingSelectBox, "ax left"),
-                        migNode(showTooltipsCheckbox, "ax left, gapx 70px 0px"), migNode(createLabel("Show tooltips"), "ax left"),
+                        migNode(showTooltipsCheckbox, "ax left, gapx 90px 0px"), migNode(createLabel("Show tooltips"), "ax left"),
                         //migNode(createLabel("Show completed tasks"), "ax right"), migNode(showCompletedCheckbox, "ax left"),
                         migNode(syncIntervalSelectBox, "ax right"), migNode(createLabel("Between RTM syncs"), "ax left"),
-                        migNode(taskSortSelectBox, "ax right"), migNode(createLabel("To sort tasks"), "ax left"),
-                        migNode(resetDefaultButton, "sx, growx"),
-                        migNode(logoutButton, "sx, growx")
+                        migNode(taskSortSelectBox, "ax right"), migNode(createLabel("To sort tasks"), "ax left")
                     ]
                 },
+                bottomButtons,
                 toaster
             ]
         }
