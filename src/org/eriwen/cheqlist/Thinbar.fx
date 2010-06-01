@@ -25,7 +25,6 @@ import org.eriwen.cheqlist.util.ViewUtils;
 /**
  * @author Eric Wendelin
  */
-
 public class Thinbar extends CustomNode {
     public-init var theme:Theme;
     public-init var mouseDraggedAction:function(MouseEvent);

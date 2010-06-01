@@ -33,7 +33,6 @@ import org.eriwen.rtm.RtmService;
 /**
  * @author Eric Wendelin
  */
-
 package class ListsPane extends Pane {
     public-init var listClickedAction: function(String);
     public-init var updateListsAction: function();

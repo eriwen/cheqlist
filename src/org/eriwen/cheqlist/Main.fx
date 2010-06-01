@@ -36,7 +36,7 @@ import org.eriwen.cheqlist.theme.*;
  * Main Cheqlist application script that creates all panes, the thinbar and 
  * handles all RTM data
  *
- * @author Eric Wendelin
+ * @author <a href="http://eriwen.com">Eric Wendelin</a>
  */
 
 package def groovyRtm = new RtmService('c11620c31ac1c7e410f039d41c813a2b', '0ce781140c74257e');

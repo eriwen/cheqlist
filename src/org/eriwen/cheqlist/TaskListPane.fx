@@ -35,7 +35,7 @@ import org.eriwen.rtm.RtmService;
  * Pane containing the task list and some related operations. Must be initialized
  * with a taskList, rtmService, and editAction (that opens the EditTaskPane)
  *
- * @author Eric Wendelin
+ * @author <a href="http://eriwen.com">Eric Wendelin</a>
  */
 
 package class TaskListPane extends Pane {
@@ -96,7 +96,7 @@ package class TaskListPane extends Pane {
 
     public def taskFilterBox:TextBox = TextBox {
         translateY: 3
-        layoutInfo: LayoutInfo { width: theme.paneWidth - 64, height: 24 }
+        layoutInfo: LayoutInfo { width: theme.paneWidth - 64, height: 22 }
         focusTraversable: false, selectOnFocus: false
         promptText: 'Search'
         text: taskFilter
@@ -211,6 +211,7 @@ package class TaskListPane extends Pane {
         fill: bind theme.foregroundColor
         opacity: bind scrollIndicatorOpacity
         visible: bind if (totalHeight > clipHeight) then true else false
+        blocksMouse: true
         onMouseEntered: function(e:MouseEvent):Void {
             (Timeline {
                 keyFrames: [
@@ -229,15 +230,16 @@ package class TaskListPane extends Pane {
                 ]
             }).play();
         }
-        /*onMouseDragged: function(e:MouseEvent):Void {
-            var yChange = e.screenY - e.dragAnchorY;
+        onMouseDragged: function(e:MouseEvent):Void {
+            var yChange = e.dragY;
             if ((scrollY <= 0 and yChange < 0) or
                     (scrollY >= (totalHeight - clipHeight) and yChange > 0)) {
                 return;
             } else {
                 scrollY += yChange;
+                scrollIndicatorY = 45 + scrollY * 0.7 * (clipHeight / totalHeight);
             }
-        }*/
+        }
     }
 
     function quickAddAction(e:MouseEvent):Void {
@@ -258,7 +260,7 @@ package class TaskListPane extends Pane {
     def quickAddTextBox:TextBox = TextBox {
         columns: 20, selectOnFocus: true,
         promptText: "Smart Add"
-        layoutInfo: LayoutInfo { width: theme.paneWidth - 23, height: 24 }
+        layoutInfo: LayoutInfo { width: theme.paneWidth - 23, height: 22 }
         action: function () { quickAddAction(new MouseEvent()) }
     };
 

@@ -21,6 +21,7 @@ import javafx.scene.control.Label;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.Glow;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.LayoutInfo;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
@@ -31,9 +32,8 @@ import org.eriwen.cheqlist.theme.Theme;
  * with a theme, priority, due date, name, overdue, completeTaskAction, and
  * editTaskAction.
  *
- * @author Eric Wendelin
+ * @author <a href="http://eriwen.com">Eric Wendelin</a>
  */
-
 public class Task extends CustomNode {
     public-init var theme:Theme;
     public-init var taskHeight:Number;
@@ -88,7 +88,7 @@ public class Task extends CustomNode {
         translateX: 38
         font: theme.normalFont, text: name,
         textFill: bind theme.foregroundColor
-        width: theme.paneWidth - 100
+        layoutInfo: LayoutInfo { width: theme.paneWidth - 100 }
     }
     def tagsLabel:Label = Label {
         translateX: 38, translateY: 16

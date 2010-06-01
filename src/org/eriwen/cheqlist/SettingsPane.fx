@@ -39,7 +39,6 @@ import javafx.animation.Timeline;
  * 
  * @author <a href="http://eriwen.com">Eric Wendelin</a>
  */
-
 package class SettingsPane extends Pane {
 
     package var visualEffects:Boolean;

@@ -22,14 +22,16 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.LayoutInfo;
 import javafx.scene.shape.Rectangle;
 
 import org.eriwen.cheqlist.theme.Theme;
 
 /**
- * @author Eric wendelin
+ * View class for a RTM List.
+ *
+ * @author <a href="http://eriwen.com">Eric Wendelin</a>
  */
-
 public class RtmList extends CustomNode {
     public-init var theme:Theme;
     public-init var listHeight:Number = 30.0;
@@ -55,10 +57,10 @@ public class RtmList extends CustomNode {
         translateX: 26, translateY: 4
         font: theme.normalFont, text: name,
         textFill: bind theme.foregroundColor
-        width: theme.paneWidth - 70
+        layoutInfo: LayoutInfo { width: theme.paneWidth - 70 }
     }
     def deleteButton = Button {
-        translateX: theme.paneWidth - 60, translateY: 2
+        translateX: theme.paneWidth - 65, translateY: 2
         text: 'Delete'
         width: 50, height: 24
         effect: ColorAdjust {
