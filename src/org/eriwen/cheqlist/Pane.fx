@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 Eric Wendelin
+ *  Copyright 2010 Eric Wendelin
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import org.eriwen.cheqlist.theme.*;
 /**
  * Base class for all Cheqlist Panes.
  *
- * @author Eric Wendelin
+ * @author <a href="http://eriwen.com">Eric Wendelin</a>
  */
 public abstract class Pane extends CustomNode {
     package var closeAction = function(e:MouseEvent) {}
@@ -80,6 +80,6 @@ public abstract class Pane extends CustomNode {
     }
 
     package function showToasterError(e:ExecutionException):Void {
-        toaster.show(e.getCause().getMessage());
+        toaster.showTimed(e.getCause().getMessage(), 10s);
     }
 }

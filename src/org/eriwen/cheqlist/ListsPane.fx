@@ -16,7 +16,6 @@
 package org.eriwen.cheqlist;
 
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 import javafx.animation.*;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -31,7 +30,9 @@ import org.eriwen.cheqlist.util.GroovyRtmUtils;
 import org.eriwen.rtm.RtmService;
 
 /**
- * @author Eric Wendelin
+ * View showing all RTM Lists and an Add List form.
+ *
+ * @author <a href="http://eriwen.com">Eric Wendelin</a>
  */
 package class ListsPane extends Pane {
     public-init var listClickedAction: function(String);
@@ -155,9 +156,7 @@ package class ListsPane extends Pane {
                 toaster.showTimed('List "{name}" added!', 1.5s);
                 updateListsAction();
             }
-        }, function (e:ExecutionException):Void {
-            toaster.showTimed(e.getCause().getMessage());
-        });
+        }, showToasterError);
     }
 
     function deleteList(listId:String) {
@@ -169,9 +168,7 @@ package class ListsPane extends Pane {
                 toaster.showTimed('List deleted', 1.5s);
                 updateListsAction();
             }
-        }, function (e:ExecutionException):Void {
-            toaster.showTimed(e.getCause().getMessage());
-        });
+        }, showToasterError);
     }
 
     def titleGroup = Group {
@@ -185,28 +182,29 @@ package class ListsPane extends Pane {
         ]
     }
 
+    def nameTextBox:TextBox = TextBox {
+        columns: 20, selectOnFocus: true,
+        layoutInfo: LayoutInfo { width: 180, height: 26 }
+        promptText: 'List Name'
+    };
+    def filterTextBox:TextBox = TextBox {
+        columns: 25, selectOnFocus: true,
+        layoutInfo: LayoutInfo { width: theme.paneWidth - 23, height: 24 }
+        promptText: '(Optional) filter'
+    };
+    def addButton:Button = Button {
+        layoutInfo: LayoutInfo { width: 80, height: 24 }
+        text: "Add List",
+        onMouseClicked: function(e:MouseEvent) {
+            addList(nameTextBox.rawText, filterTextBox.rawText);
+            nameTextBox.text = '';
+            filterTextBox.text = '';
+        }
+    };
+
     def addListForm = Group {
         var addForm:VBox;
         def addHeight = 60;
-        def nameTextBox:TextBox = TextBox {
-            columns: 20, selectOnFocus: true,
-            layoutInfo: LayoutInfo { width: 180, height: 24 }
-            promptText: 'List Name'
-        };
-        def filterTextBox:TextBox = TextBox {
-            columns: 25, selectOnFocus: true,
-            layoutInfo: LayoutInfo { width: theme.paneWidth - 23, height: 24 }
-            promptText: '(Optional) filter'
-        };
-        def addButton:Button = Button {
-            layoutInfo: LayoutInfo { width: 80, height: 24 }
-            text: "Add List",
-            onMouseClicked: function(e:MouseEvent) {
-                addList(nameTextBox.rawText, filterTextBox.rawText);
-                nameTextBox.text = '';
-                filterTextBox.text = '';
-            }
-        };
         
         translateY: theme.paneHeight - addHeight
         blocksMouse: true

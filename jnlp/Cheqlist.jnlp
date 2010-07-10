@@ -3,7 +3,7 @@
     <information>
         <title>Cheqlist</title>
         <vendor>Eric Wendelin</vendor>
-        <homepage href="http://kenai.com/projects/cheqlist"/>
+        <homepage href="http://github.com/emwendelin/cheqlist"/>
         <description>A to-do list manager powered by Remember The Milk</description>
         <icon href="cheqlist_logo_256.png" width="256" height="256"/>
         <icon kind="shortcut" href="cheqlist_logo_16.png" width="16" height="16"/>
@@ -19,20 +19,19 @@
         <all-permissions/>
     </security>
     <resources>
-        <j2se version="1.6+" java-vm-args=""/>
+        <j2se version="1.6+"/>
         <property name="jnlp.packEnabled" value="true"/>
         <property name="jnlp.versionEnabled" value="true"/>
         <extension name="JavaFX Runtime" href="http://dl.javafx.com/1.3/javafx-rt.jnlp"/>
         <jar href="Cheqlist.jar" main="true"/>
         <jar href="lib/miglayout-3.7.jar"/>
-        <jar href="lib/JFXtras-Common-0.7beta2.jar"/>
-        <jar href="lib/JFXtras-Controls-0.7beta2.jar"/>
-        <jar href="lib/JFXtras-Test-0.7beta.jar"/>
+        <jar href="lib/JFXtras-Common-0.7rc2.1.jar"/>
+        <jar href="lib/JFXtras-Controls-0.7rc2.jar"/>
+        <jar href="lib/JFXtras-Test-0.7rc1.jar"/>
         <jar href="lib/groovy-all.jar"/>
         <jar href="lib/groovyrtm.jar"/>
         <jar href="lib/swing-worker-1.2.jar"/>
         <jar href="lib/commons-codec-1.3.jar"/>
-        <property name="org.eriwen.cheqlist.showTestingDialog" value="false"/>
     </resources>
     <application-desc main-class="com.sun.javafx.runtime.main.Main">
         <argument>MainJavaFXScript=org.eriwen.cheqlist.Main</argument>

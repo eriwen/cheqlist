@@ -37,7 +37,6 @@ import org.eriwen.rtm.RtmService;
  *
  * @author <a href="http://eriwen.com">Eric Wendelin</a>
  */
-
 package class TaskListPane extends Pane {
 
     package var taskList = [];

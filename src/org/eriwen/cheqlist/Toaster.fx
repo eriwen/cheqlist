@@ -26,9 +26,9 @@ import org.eriwen.cheqlist.theme.Theme;
 
 /**
  * A toaster widget that pops up from the bottom of the node it is applied to
- * with a message and fades away
+ * with a message and fades away.
  *
- * @author Eric Wendelin
+ * @author <a href="http://eriwen.com">Eric Wendelin</a>
  */
 package class Toaster extends CustomNode {
     package var toasterMessage:String = '';
