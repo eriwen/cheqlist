@@ -2,6 +2,8 @@
 
 Cheqlist is an open-source Remember The Milk desktop application written in JavaFX and Groovy. All you need to use Cheqlist is a fairly recent version of [Java](http://www.java.com/en/download/index.jsp) and a [Remember The Milk](http://www.rememeberthemilk.com/) account.
 
+[Launch Cheqlist](http://eriwen.com/cheqlist/Cheqlist.jnlp)
+
 ## Features ##
 
  * Add tasks quickly using RTM [Smart Add](http://www.rememberthemilk.com/services/smartadd/) or the full Add Task form
