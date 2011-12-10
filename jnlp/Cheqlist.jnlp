@@ -3,7 +3,7 @@
     <information>
         <title>Cheqlist</title>
         <vendor>Eric Wendelin</vendor>
-        <homepage href="http://github.com/emwendelin/cheqlist"/>
+        <homepage href="http://github.com/eriwen/cheqlist-javafx"/>
         <description>A to-do list manager powered by Remember The Milk</description>
         <icon href="cheqlist_logo_256.png" width="256" height="256"/>
         <icon kind="shortcut" href="cheqlist_logo_16.png" width="16" height="16"/>
