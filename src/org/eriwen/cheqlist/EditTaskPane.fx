@@ -49,11 +49,11 @@ package class EditTaskPane extends TaskPaneBase {
         taskId = task.get('task_id').toString();
         taskSeriesId = task.get('taskseries_id').toString();
         listId = task.get('list_id').toString();
-        nameField.text = task.get('name').toString();
+        nameField.text = new String((task.get('name').toString()).getBytes(), 'UTF-8');
         dueField.text = strUtils.formatFriendlyDate(task.get('due').toString(), task.get('has_due_time').toString(), timezoneOffset);
         repeatField.text = strUtils.formatFriendlyRepeat(task.get('repeat').toString());
         estimateField.text = task.get('estimate').toString();
-        tagsField.text = task.get('tags').toString();
+        tagsField.text = new String((task.get('tags').toString()).getBytes(), 'UTF-8');
         urlField.text = task.get('url').toString();
         listsSelectBox.selectByValue(task.get('list_id').toString());
         locationsSelectBox.selectByValue(task.get('location_id').toString());
@@ -148,7 +148,7 @@ package class EditTaskPane extends TaskPaneBase {
     }
 
     function onNameChanged(value:String) {
-        if (value != task.get('name').toString()) {
+        if (value != new String((task.get('name').toString()).getBytes(), 'UTF-8')) {
             rtmUtils.asyncTask(function () {
                 rtm.tasksSetName(listId, taskSeriesId, taskId, value);
                 updateTaskListAction();

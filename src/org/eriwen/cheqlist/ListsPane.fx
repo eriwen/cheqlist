@@ -65,7 +65,7 @@ package class ListsPane extends Pane {
         width: theme.paneWidth, height: theme.paneHeight - 174
         content: bind for (list in listsList) {
             var listMap = list as Map;
-            var listName = listMap.get('name').toString();
+            var listName = new String((listMap.get('name').toString()).getBytes(), 'UTF-8');
             var listId = listMap.get('id').toString();
             RtmList {
                 listId: listId

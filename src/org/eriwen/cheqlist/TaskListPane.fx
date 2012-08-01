@@ -15,6 +15,7 @@
  */
 package org.eriwen.cheqlist;
 
+import java.lang.String;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import javafx.animation.*;
@@ -62,7 +63,7 @@ package class TaskListPane extends Pane {
         for (list in lists) {
            var listMap:Map = list as LinkedHashMap;
            if (listMap.get('id').toString() == listId) {
-               return listMap.get('name').toString();
+               return new String((listMap.get('name').toString()).getBytes(), 'UTF-8');
            }
         }
         return '';
@@ -130,13 +131,13 @@ package class TaskListPane extends Pane {
         content: bind for (task in taskList) {
             var taskMap = task as LinkedHashMap;
             var dueStr = taskMap.get('due').toString();
-            var taskName = taskMap.get('name').toString();
+            var taskName = new String((taskMap.get('name').toString()).getBytes(), 'UTF-8');
             Task {
                 taskHeight: taskHeight
                 name: taskName
                 due: strUtils.formatFriendlyDate(dueStr, taskMap.get('has_due_time').toString(), timezoneOffset)
                 listName: getListNameById(taskMap.get('list_id').toString())
-                tags: taskMap.get('tags').toString()
+                tags: new String((taskMap.get('tags').toString()).getBytes(), 'UTF-8');
                 overdue: strUtils.isOverdue(dueStr, timezoneOffset);
                 priority: taskMap.get('priority').toString()
                 theme: theme

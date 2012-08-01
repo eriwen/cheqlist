@@ -391,6 +391,7 @@ function updateTasks():Void {
             amendedFilter = "status:incomplete and {taskFilter}";
         }
         return groovyRtm.tasksGetList(null, amendedFilter);
+
     }, onTasksLoaded);
 }
 
