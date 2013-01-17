@@ -1,6 +1,8 @@
+**NOTE: This project is deprecated and will not be updated anymore, _however_, I will keep the app available for as long as I can.**
+
 # Welcome to Cheqlist! #
 
-Cheqlist is an open-source Remember The Milk desktop application written in JavaFX and Groovy. All you need to use Cheqlist is [Java 6](http://www.java.com/en/download/index.jsp) or higher and a [Remember The Milk](http://www.rememeberthemilk.com/) account.
+[Cheqlist](http://cheqlist.org) is an open-source Remember The Milk desktop application written in JavaFX and Groovy. All you need to use Cheqlist is [Java 6](http://www.java.com/en/download/index.jsp) or higher and a [Remember The Milk](http://www.rememeberthemilk.com/) account.
 
 [Download Cheqlist](http://edub.me/Zg0Q6)
 
@@ -15,9 +17,3 @@ Cheqlist is an open-source Remember The Milk desktop application written in Java
  * Auto-syncs with your Remember The Milk account
  * Automatic updates
  * Lots more!
-
-## Need help? ##
-
-Something you wish Cheqlist could do? Add to the [Issue Tracker](http://github.com/eriwen/cheqlist-javafx/issues)
-
-If you want to help Cheqlist out, request features, promote it on social networking sites, or [contact me](http://eriwen.com/contact/) directly.
